@@ -36,3 +36,48 @@ function generateAICreative() {
     `;
   }
 }
+
+// 📅 Módulo 5: Calendário e Agendador
+function scheduleVideo() {
+  const combo = document.getElementById('comboSelect').value;
+  const day = document.getElementById('daySelect').value;
+  const time = document.getElementById('scheduleTime').value;
+
+  if (!combo) {
+    alert('Selecione um vídeo da matriz para agendar!');
+    return;
+  }
+
+  agenda.push({ id: Date.now(), combo, day, time });
+  renderCalendar();
+}
+
+function removeSchedule(id) {
+  agenda = agenda.filter(item => item.id !== id);
+  renderCalendar();
+}
+
+function clearCalendar() {
+  agenda = [];
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const container = document.getElementById('calendarGrid');
+  if (!container) return;
+
+  if (agenda.length === 0) {
+    container.innerHTML = `<p class="text-xs text-slate-500 italic p-3 text-center border border-slate-800/50 rounded">Nenhuma postagem agendada para esta semana.</p>`;
+    return;
+  }
+
+  container.innerHTML = agenda.map(item => `
+    <div class="p-2 bg-slate-950 border border-slate-800 rounded flex justify-between items-center gap-2 fade-in">
+      <div class="space-y-0.5">
+        <span class="text-indigo-400 font-semibold block text-[11px]">${item.day} às ${item.time}</span>
+        <p class="text-slate-300 text-[10px] truncate max-w-[280px]">${item.combo}</p>
+      </div>
+      <button onclick="removeSchedule(${item.id})" class="text-rose-400 hover:text-rose-300 font-bold text-xs px-1">✕</button>
+    </div>
+  `).join('');
+}
