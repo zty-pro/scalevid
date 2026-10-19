@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScaleVid - Studio de Multiplicação</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- CSS Customizado -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-6 font-sans">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto mb-6 border-b border-slate-800 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-indigo-400 tracking-tight">ScaleVid Studio</h1>
+      <p class="text-xs text-slate-400">O motor de escala para os seus vídeos virais.</p>
+    </div>
+    <span class="text-[11px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 px-3 py-1 rounded-full font-medium">
+      Versão Client-Side (100% Grátis)
+    </span>
+  </header>
+
+  <!-- Dashboard Principal -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <!-- Coluna 1: Gestão de Blocos -->
+    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4">
+      <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+        📂 1. Esteira de Blocos
+      </h2>
+
+      <!-- Ganchos -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold text-emerald-400">Ganchos</span>
+          <button onclick="addBlock('gancho')" class="text-[11px] bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 transition">+ Adicionar</button>
+        </div>
+        <div id="listGanchos" class="space-y-1"></div>
+      </div>
+
+      <!-- Corpos -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold text-blue-400">Corpos</span>
+          <button onclick="addBlock('corpo')" class="text-[11px] bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30 transition">+ Adicionar</button>
+        </div>
+        <div id="listCorpos" class="space-y-1"></div>
+      </div>
+
+      <!-- CTAs -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold text-purple-400">CTAs</span>
+          <button onclick="addBlock('cta')" class="text-[11px] bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded border border-purple-500/30 transition">+ Adicionar</button>
+        </div>
+        <div id="listCtas" class="space-y-1"></div>
+      </div>
+    </div>
+
+    <!-- Coluna 2: Compliance e Roteiro -->
+    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
+      <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+        ✍️ 2. Compliance de Roteiro
+      </h2>
+      <p class="text-xs text-slate-400">Digite seu texto abaixo para detectar termos bloqueados no TikTok/Reels:</p>
+      
+      <textarea id="scriptInput" rows="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition" placeholder="Exemplo: Compre este produto milagroso e venha no meu WhatsApp..."></textarea>
+      
+      <div id="alertsContainer" class="space-y-1.5"></div>
+    </div>
+
+    <!-- Coluna 3: Matriz de Combinações -->
+    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider">
+          🚀 3. Matriz de Saída
+        </h2>
+        <span id="totalCombos" class="text-[11px] text-indigo-400 bg-indigo-500/10 font-mono px-2 py-0.5 rounded border border-indigo-500/20">0 combinações</span>
+      </div>
+
+      <div id="matrixResults" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
+    </div>
+
+  </main>
+
+  <!-- JS Principal -->
+  <script src="app.js"></script>
+</body>
+</html>
