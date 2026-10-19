@@ -1,25 +1,27 @@
 // ==========================================
-// VARIÁVEIS GLOBAIS (Escopo Global Corrigido)
+// ESTADO GLOBAL DO APLICATIVO
 // ==========================================
-let ganchos = [{ id: 1, name: 'Gancho_01.mp4', duration: 4 }];
-let corpos = [{ id: 1, name: 'Corpo_01.mp4', duration: 15 }];
-let ctas = [{ id: 1, name: 'CTA_01.mp4', duration: 5 }];
-let agenda = [];
+window.ganchos = [{ id: 1, name: 'Gancho_01.mp4', duration: 4 }];
+window.corpos = [{ id: 1, name: 'Corpo_01.mp4', duration: 15 }];
+window.ctas = [{ id: 1, name: 'CTA_01.mp4', duration: 5 }];
+window.agenda = [];
 
-// Termos sensíveis e proibidos (Compliance TikTok / Redes Sociais)
+// Termos sensíveis e proibidos (Compliance TikTok / Reels)
 const PROHIBITED_WORDS = ['cura', 'emagrece', 'milagroso', 'renda garantida', 'dinheiro fácil', 'fique rico'];
 const REDIRECT_WORDS = ['whatsapp', 'telegram', 'link na bio', 'chama no pv'];
 
-// Inicialização após o DOM carregar
+// Inicialização automática ao carregar
 document.addEventListener('DOMContentLoaded', () => {
-  renderBlocks();
-  updateCombinations();
-  setupScriptValidator();
-  renderCalendar();
+  window.renderBlocks();
+  window.updateCombinations();
+  window.setupScriptValidator();
+  window.renderCalendar();
 });
 
-// Adicionar novo bloco de mídia
-function addBlock(type) {
+// ==========================================
+// 1. ESTEIRA DE BLOCOS (Funções Expostas)
+// ==========================================
+window.addBlock = function(type) {
   const nameInput = prompt(`Nome do arquivo de vídeo para ${type.toUpperCase()}:`, `${type}_${Date.now().toString().slice(-4)}.mp4`);
   if (!nameInput) return;
 
@@ -28,53 +30,53 @@ function addBlock(type) {
 
   const newBlock = { id: Date.now(), name: nameInput, duration };
 
-  if (type === 'gancho') ganchos.push(newBlock);
-  if (type === 'corpo') corpos.push(newBlock);
-  if (type === 'cta') ctas.push(newBlock);
+  if (type === 'gancho') window.ganchos.push(newBlock);
+  if (type === 'corpo') window.corpos.push(newBlock);
+  if (type === 'cta') window.ctas.push(newBlock);
 
-  renderBlocks();
-  updateCombinations();
-}
+  window.renderBlocks();
+  window.updateCombinations();
+};
 
-// Remover bloco
-function removeBlock(type, id) {
-  if (type === 'gancho') ganchos = ganchos.filter(b => b.id !== id);
-  if (type === 'corpo') corpos = corpos.filter(b => b.id !== id);
-  if (type === 'cta') ctas = ctas.filter(b => b.id !== id);
+window.removeBlock = function(type, id) {
+  if (type === 'gancho') window.ganchos = window.ganchos.filter(b => b.id !== id);
+  if (type === 'corpo') window.corpos = window.corpos.filter(b => b.id !== id);
+  if (type === 'cta') window.ctas = window.ctas.filter(b => b.id !== id);
 
-  renderBlocks();
-  updateCombinations();
-}
+  window.renderBlocks();
+  window.updateCombinations();
+};
 
-// Renderizar blocos
-function renderBlocks() {
+window.renderBlocks = function() {
   const containerG = document.getElementById('listGanchos');
   const containerC = document.getElementById('listCorpos');
   const containerCTA = document.getElementById('listCtas');
 
-  if (containerG) containerG.innerHTML = renderBlockList(ganchos, 'gancho');
-  if (containerC) containerC.innerHTML = renderBlockList(corpos, 'corpo');
-  if (containerCTA) containerCTA.innerHTML = renderBlockList(ctas, 'cta');
-}
+  if (containerG) containerG.innerHTML = window.renderBlockList(window.ganchos, 'gancho');
+  if (containerC) containerC.innerHTML = window.renderBlockList(window.corpos, 'corpo');
+  if (containerCTA) containerCTA.innerHTML = window.renderBlockList(window.ctas, 'cta');
+};
 
-function renderBlockList(list, type) {
-  if (list.length === 0) return `<p class="text-xs text-slate-500 italic">Nenhum clipe adicionado.</p>`;
+window.renderBlockList = function(list, type) {
+  if (!list || list.length === 0) return `<p class="text-xs text-slate-500 italic">Nenhum clipe adicionado.</p>`;
   return list.map(item => `
     <div class="flex justify-between items-center bg-slate-950 px-3 py-1.5 rounded border border-slate-800/80 text-xs text-slate-300">
       <span>📹 ${item.name} <strong class="text-slate-500">(${item.duration}s)</strong></span>
-      <button onclick="removeBlock('${type}', ${item.id})" class="text-rose-400 hover:text-rose-300 ml-2 font-bold">×</button>
+      <button onclick="window.removeBlock('${type}', ${item.id})" class="text-rose-400 hover:text-rose-300 ml-2 font-bold px-1">×</button>
     </div>
   `).join('');
-}
+};
 
-// Atualizar a Matriz de Combinações
-function updateCombinations() {
+// ==========================================
+// 2 & 3. MATRIZ DE COMBINAÇÕES & COMPLIANCE
+// ==========================================
+window.updateCombinations = function() {
   const container = document.getElementById('matrixResults');
   const counter = document.getElementById('totalCombos');
   const selectCombo = document.getElementById('comboSelect');
   if (!container) return;
 
-  const total = ganchos.length * corpos.length * ctas.length;
+  const total = window.ganchos.length * window.corpos.length * window.ctas.length;
   if (counter) counter.innerText = `${total} combinações`;
 
   if (selectCombo) selectCombo.innerHTML = `<option value="">Selecione uma combinação...</option>`;
@@ -87,9 +89,9 @@ function updateCombinations() {
   let html = '';
   let comboIndex = 1;
 
-  ganchos.forEach((g, idxG) => {
-    corpos.forEach((c, idxC) => {
-      ctas.forEach((cta, idxCta) => {
+  window.ganchos.forEach((g, idxG) => {
+    window.corpos.forEach((c, idxC) => {
+      window.ctas.forEach((cta, idxCta) => {
         const duracaoTotal = g.duration + c.duration + cta.duration;
         const comboName = `Vídeo #${comboIndex} (${g.name} + ${c.name} + ${cta.name})`;
 
@@ -135,10 +137,9 @@ function updateCombinations() {
   });
 
   container.innerHTML = html;
-}
+};
 
-// Compliance
-function setupScriptValidator() {
+window.setupScriptValidator = function() {
   const scriptInput = document.getElementById('scriptInput');
   const alertsContainer = document.getElementById('alertsContainer');
   if (!scriptInput || !alertsContainer) return;
@@ -177,10 +178,12 @@ function setupScriptValidator() {
         </div>`;
     }
   });
-}
+};
 
-// 🤖 Módulo 4: Gerador por IA
-function generateAICreative() {
+// ==========================================
+// 4. GERADOR POR IA (Módulo IA Studio)
+// ==========================================
+window.generateAICreative = function() {
   const promptInput = document.getElementById('aiPrompt').value.trim();
   const mediaType = document.getElementById('aiMediaType').value;
   const targetBlock = document.getElementById('aiTargetBlock').value;
@@ -196,12 +199,13 @@ function generateAICreative() {
   const duration = mediaType === 'image' ? 3 : 5;
 
   const newBlock = { id: Date.now(), name: generatedFileName, duration };
-  if (targetBlock === 'gancho') ganchos.push(newBlock);
-  if (targetBlock === 'corpo') corpos.push(newBlock);
-  if (targetBlock === 'cta') ctas.push(newBlock);
 
-  renderBlocks();
-  updateCombinations();
+  if (targetBlock === 'gancho') window.ganchos.push(newBlock);
+  if (targetBlock === 'corpo') window.corpos.push(newBlock);
+  if (targetBlock === 'cta') window.ctas.push(newBlock);
+
+  window.renderBlocks();
+  window.updateCombinations();
 
   if (outputContainer && preview) {
     outputContainer.classList.remove('hidden');
@@ -214,49 +218,51 @@ function generateAICreative() {
       </div>
     `;
   }
-}
+};
 
-// 📅 Módulo 5: Calendário e Agendador
-function scheduleVideo() {
+// ==========================================
+// 5. AGENDADOR & CALENDÁRIO
+// ==========================================
+window.scheduleVideo = function() {
   const combo = document.getElementById('comboSelect').value;
   const day = document.getElementById('daySelect').value;
   const time = document.getElementById('scheduleTime').value;
 
   if (!combo) {
-    alert('Selecione um vídeo da matriz para agendar!');
+    alert('Selecione uma combinação da lista para agendar!');
     return;
   }
 
-  agenda.push({ id: Date.now(), combo, day, time });
-  renderCalendar();
-}
+  window.agenda.push({ id: Date.now(), combo, day, time });
+  window.renderCalendar();
+};
 
-function removeSchedule(id) {
-  agenda = agenda.filter(item => item.id !== id);
-  renderCalendar();
-}
+window.removeSchedule = function(id) {
+  window.agenda = window.agenda.filter(item => item.id !== id);
+  window.renderCalendar();
+};
 
-function clearCalendar() {
-  agenda = [];
-  renderCalendar();
-}
+window.clearCalendar = function() {
+  window.agenda = [];
+  window.renderCalendar();
+};
 
-function renderCalendar() {
+window.renderCalendar = function() {
   const container = document.getElementById('calendarGrid');
   if (!container) return;
 
-  if (agenda.length === 0) {
+  if (window.agenda.length === 0) {
     container.innerHTML = `<p class="text-xs text-slate-500 italic p-3 text-center border border-slate-800/50 rounded">Nenhuma postagem agendada para esta semana.</p>`;
     return;
   }
 
-  container.innerHTML = agenda.map(item => `
+  container.innerHTML = window.agenda.map(item => `
     <div class="p-2 bg-slate-950 border border-slate-800 rounded flex justify-between items-center gap-2">
       <div class="space-y-0.5">
         <span class="text-indigo-400 font-semibold block text-[11px]">${item.day} às ${item.time}</span>
         <p class="text-slate-300 text-[10px] truncate max-w-[280px]">${item.combo}</p>
       </div>
-      <button onclick="removeSchedule(${item.id})" class="text-rose-400 hover:text-rose-300 font-bold text-xs px-1">✕</button>
+      <button onclick="window.removeSchedule(${item.id})" class="text-rose-400 hover:text-rose-300 font-bold text-xs px-1">✕</button>
     </div>
   `).join('');
-}
+};
