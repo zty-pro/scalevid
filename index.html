@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ScaleVid - Studio de Multiplicação</title>
+  <title>ScaleVid Studio - Gerador & Agendador</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- CSS Customizado -->
@@ -12,18 +12,18 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-6 font-sans">
 
   <!-- Header -->
-  <header class="max-w-6xl mx-auto mb-6 border-b border-slate-800 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+  <header class="max-w-7xl mx-auto mb-6 border-b border-slate-800 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
     <div>
       <h1 class="text-2xl font-bold text-indigo-400 tracking-tight">ScaleVid Studio</h1>
-      <p class="text-xs text-slate-400">O motor de escala para os seus vídeos virais.</p>
+      <p class="text-xs text-slate-400">Motor de Escala, Criação por IA & Agendamento para TikTok/Reels.</p>
     </div>
     <span class="text-[11px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 px-3 py-1 rounded-full font-medium">
-      Versão Client-Side (100% Grátis)
+      Versão Complete Client-Side
     </span>
   </header>
 
-  <!-- Dashboard Principal -->
-  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+  <!-- Dashboard Principal (Grid de 3 Colunas) -->
+  <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
     <!-- Coluna 1: Gestão de Blocos -->
     <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4">
@@ -59,19 +59,19 @@
       </div>
     </div>
 
-    <!-- Coluna 2: Compliance e Roteiro -->
+    <!-- Coluna 2: Compliance de Roteiro -->
     <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
       <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
         ✍️ 2. Compliance de Roteiro
       </h2>
-      <p class="text-xs text-slate-400">Digite seu texto abaixo para detectar termos bloqueados no TikTok/Reels:</p>
+      <p class="text-xs text-slate-400">Validador de termos sensíveis e diretrizes antispam:</p>
       
       <textarea id="scriptInput" rows="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition" placeholder="Exemplo: Compre este produto milagroso e venha no meu WhatsApp..."></textarea>
       
       <div id="alertsContainer" class="space-y-1.5"></div>
     </div>
 
-    <!-- Coluna 3: Matriz de Combinações -->
+    <!-- Coluna 3: Matriz de Saída -->
     <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider">
@@ -84,6 +84,86 @@
     </div>
 
   </main>
+
+  <!-- Novas Seções: Gerador por IA e Calendário -->
+  <section class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Módulo 4: Gerador de Criativos IA -->
+    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4">
+      <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2 flex justify-between items-center">
+        <span>🤖 4. Gerador de Criativos (IA Studio)</span>
+        <span class="text-[10px] text-indigo-400 font-normal">Fotos & Vídeos de Fundo</span>
+      </h2>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Descrição / Prompt da Imagem ou Vídeo:</label>
+          <input id="aiPrompt" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" placeholder="Ex: Fundo abstrato neon 9:16 com efeito de partículas brilhantes">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Mídia:</label>
+            <select id="aiMediaType" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-2 text-xs text-slate-200">
+              <option value="image">🖼️ Imagem de Fundo (1080x1920)</option>
+              <option value="video">📹 Vídeo em Loop (9:16)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Destinar para:</label>
+            <select id="aiTargetBlock" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-2 text-xs text-slate-200">
+              <option value="gancho">Ganchos (1.º Bloco)</option>
+              <option value="corpo">Corpos (2.º Bloco)</option>
+              <option value="cta">CTAs (3.º Bloco)</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="generateAICreative()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 px-4 rounded-lg transition shadow-lg shadow-indigo-600/20 flex justify-center items-center gap-2">
+          ✨ Gerar Criativo & Adicionar à Esteira
+        </button>
+
+        <div id="aiOutputContainer" class="hidden p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-2 fade-in">
+          <span class="text-emerald-400 font-semibold block">🎉 Mídia Gerada com Sucesso!</span>
+          <div id="aiPreview" class="rounded overflow-hidden border border-slate-800 bg-black flex justify-center items-center min-h-[120px]"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulo 5: Calendário e Agendador Semanal -->
+    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4">
+      <h2 class="font-semibold text-sm text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2 flex justify-between items-center">
+        <span>📅 5. Agendador de Conteúdo (TikTok/Reels)</span>
+        <button onclick="clearCalendar()" class="text-[10px] text-rose-400 hover:underline">Limpar Agenda</button>
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+        <select id="comboSelect" class="bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-slate-200">
+          <option value="">Selecione uma combinação...</option>
+        </select>
+        <select id="daySelect" class="bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-slate-200">
+          <option value="Segunda-feira">Segunda-feira</option>
+          <option value="Terça-feira">Terça-feira</option>
+          <option value="Quarta-feira">Quarta-feira</option>
+          <option value="Quinta-feira">Quinta-feira</option>
+          <option value="Sexta-feira">Sexta-feira</option>
+          <option value="Sábado">Sábado</option>
+          <option value="Domingo">Domingo</option>
+        </select>
+      </div>
+
+      <div class="flex gap-2">
+        <input id="scheduleTime" type="time" value="09:00" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-200">
+        <button onclick="scheduleVideo()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-1.5 px-3 rounded transition">
+          📌 Agendar Postagem
+        </button>
+      </div>
+
+      <!-- Grade Semanal -->
+      <div id="calendarGrid" class="space-y-2 max-h-[220px] overflow-y-auto pr-1 text-xs"></div>
+    </div>
+
+  </section>
 
   <!-- JS Principal -->
   <script src="app.js"></script>

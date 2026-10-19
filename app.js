@@ -7,11 +7,15 @@ let ganchos = [{ id: 1, name: 'Gancho_01.mp4', duration: 4 }];
 let corpos = [{ id: 1, name: 'Corpo_01.mp4', duration: 15 }];
 let ctas = [{ id: 1, name: 'CTA_01.mp4', duration: 5 }];
 
+// Estado do Agendador
+let agenda = [];
+
 // Inicialização após o DOM carregar
 document.addEventListener('DOMContentLoaded', () => {
   renderBlocks();
   updateCombinations();
   setupScriptValidator();
+  renderCalendar();
 });
 
 // Adicionar novo bloco de mídia
@@ -32,7 +36,7 @@ function addBlock(type) {
   updateCombinations();
 }
 
-// Remover bloco de mídia
+// Remover bloco
 function removeBlock(type, id) {
   if (type === 'gancho') ganchos = ganchos.filter(b => b.id !== id);
   if (type === 'corpo') corpos = corpos.filter(b => b.id !== id);
@@ -42,7 +46,7 @@ function removeBlock(type, id) {
   updateCombinations();
 }
 
-// Renderizar os botões de blocos na tela
+// Renderizar blocos
 function renderBlocks() {
   const containerG = document.getElementById('listGanchos');
   const containerC = document.getElementById('listCorpos');
@@ -63,14 +67,17 @@ function renderBlockList(list, type) {
   `).join('');
 }
 
-// Atualizar a Matriz de Combinações (Produto Cartesiano)
+// Atualizar a Matriz de Combinações
 function updateCombinations() {
   const container = document.getElementById('matrixResults');
   const counter = document.getElementById('totalCombos');
+  const selectCombo = document.getElementById('comboSelect');
   if (!container) return;
 
   const total = ganchos.length * corpos.length * ctas.length;
   if (counter) counter.innerText = `${total} combinações`;
+
+  if (selectCombo) selectCombo.innerHTML = `<option value="">Selecione uma combinação...</option>`;
 
   if (total === 0) {
     container.innerHTML = `<p class="text-xs text-slate-500 p-4 text-center">Adicione pelo menos 1 clipe em cada pasta para gerar combinações.</p>`;
@@ -84,8 +91,13 @@ function updateCombinations() {
     corpos.forEach((c, idxC) => {
       ctas.forEach((cta, idxCta) => {
         const duracaoTotal = g.duration + c.duration + cta.duration;
+        const comboName = `Vídeo #${comboIndex} (${g.name} + ${c.name} + ${cta.name})`;
 
-        // Etiqueta de Originalidade
+        // Opção para o Agendador
+        if (selectCombo) {
+          selectCombo.innerHTML += `<option value="${comboName}">${comboName}</option>`;
+        }
+
         let status = 'Original';
         let badgeStyle = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
         let rec = 'Poste primeiro';
@@ -126,7 +138,7 @@ function updateCombinations() {
   container.innerHTML = html;
 }
 
-// Validador de Roteiro e Compliance em Tempo Real
+// Compliance
 function setupScriptValidator() {
   const scriptInput = document.getElementById('scriptInput');
   const alertsContainer = document.getElementById('alertsContainer');
@@ -135,7 +147,6 @@ function setupScriptValidator() {
   scriptInput.addEventListener('input', (e) => {
     const text = e.target.value.toLowerCase();
     alertsContainer.innerHTML = '';
-
     if (!text.trim()) return;
 
     let hasAlerts = false;
@@ -155,7 +166,7 @@ function setupScriptValidator() {
         hasAlerts = true;
         alertsContainer.innerHTML += `
           <div class="p-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded text-xs flex items-center gap-1.5">
-            <span>🚫</span> <span>Direcionamento externo: <strong>"${word}"</strong> (no TikTok Shop a venda é no carrinho)</span>
+            <span>🚫</span> <span>Direcionamento externo: <strong>"${word}"</strong></span>
           </div>`;
       }
     });
@@ -167,4 +178,86 @@ function setupScriptValidator() {
         </div>`;
     }
   });
+}
+
+// 🤖 Módulo 4: Gerador por IA (Simulado Client-Side)
+function generateAICreative() {
+  const promptInput = document.getElementById('aiPrompt').value.trim();
+  const mediaType = document.getElementById('aiMediaType').value;
+  const targetBlock = document.getElementById('aiTargetBlock').value;
+  const outputContainer = document.getElementById('aiOutputContainer');
+  const preview = document.getElementById('aiPreview');
+
+  if (!promptInput) {
+    alert('Por favor, digite uma descrição para a IA.');
+    return;
+  }
+
+  const generatedFileName = `IA_${mediaType.toUpperCase()}_${Date.now().toString().slice(-4)}.${mediaType === 'image' ? 'jpg' : 'mp4'}`;
+  const duration = mediaType === 'image' ? 3 : 5;
+
+  // Adiciona diretamente à esteira
+  const newBlock = { id: Date.now(), name: generatedFileName, duration };
+  if (targetBlock === 'gancho') ganchos.push(newBlock);
+  if (targetBlock === 'corpo') corpos.push(newBlock);
+  if (targetBlock === 'cta') ctas.push(newBlock);
+
+  renderBlocks();
+  updateCombinations();
+
+  // Exibe o Preview
+  outputContainer.classList.remove('hidden');
+  preview.innerHTML = `
+    <div class="p-3 text-center space-y-1">
+      <div class="text-2xl">${mediaType === 'image' ? '🖼️' : '🎥'}</div>
+      <p class="text-indigo-400 font-mono text-xs font-semibold">${generatedFileName}</p>
+      <p class="text-[10px] text-slate-400 italic">" Prompt: ${promptInput} "</p>
+      <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded">Adicionado à pasta de ${targetBlock.toUpperCase()}</span>
+    </div>
+  `;
+}
+
+// 📅 Módulo 5: Calendário e Agendador
+function scheduleVideo() {
+  const combo = document.getElementById('comboSelect').value;
+  const day = document.getElementById('daySelect').value;
+  const time = document.getElementById('scheduleTime').value;
+
+  if (!combo) {
+    alert('Selecione um vídeo da matriz para agendar!');
+    return;
+  }
+
+  agenda.push({ id: Date.now(), combo, day, time });
+  renderCalendar();
+}
+
+function removeSchedule(id) {
+  agenda = agenda.filter(item => item.id !== id);
+  renderCalendar();
+}
+
+function clearCalendar() {
+  agenda = [];
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const container = document.getElementById('calendarGrid');
+  if (!container) return;
+
+  if (agenda.length === 0) {
+    container.innerHTML = `<p class="text-xs text-slate-500 italic p-3 text-center border border-slate-800/50 rounded">Nenhuma postagem agendada para esta semana.</p>`;
+    return;
+  }
+
+  container.innerHTML = agenda.map(item => `
+    <div class="p-2 bg-slate-950 border border-slate-800 rounded flex justify-between items-center gap-2 fade-in">
+      <div class="space-y-0.5">
+        <span class="text-indigo-400 font-semibold block text-[11px]">${item.day} às ${item.time}</span>
+        <p class="text-slate-300 text-[10px] truncate max-w-[280px]">${item.combo}</p>
+      </div>
+      <button onclick="removeSchedule(${item.id})" class="text-rose-400 hover:text-rose-300 font-bold text-xs px-1">✕</button>
+    </div>
+  `).join('');
 }
